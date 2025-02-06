@@ -34,6 +34,30 @@ def player1_turn(stats):
         print("You restored 20 mana")
         print_stats(stats)
 
+    def player2_turn(stats):
+        name2 = input("\n Enter your name,Player 2: ")
+        print("Choose your move,", name2,":", end='')
+        player_choice2 = input(" Attack,Heal,Cast fireball or Restore mana?")
+
+        if player_choice2 == "Attack":
+            damage = random.choice(range(10, 20))
+            stats["player1_health"] -= damage
+            print("You dealt: ", damage, " damage")
+            print_stats(stats)
+        elif player_choice2 == "Heal":
+            stats["player2_health"] += 10
+            print(" Your health now is: ", stats["player2_health"])
+            print_stats(stats)
+        elif player_choice2 == "Cast fireball":
+            stats["player2_mana"] -= 40
+            stats["player1_health"] -= 30
+            print("Damage dealt: 30")
+            print_stats(stats)
+        elif player_choice2 == "Restore mana":
+            stats["player2_mana"] += 20
+            print("You restored 20 mana")
+            print_stats(stats)
+
 def main():
     stats = {
         "player1_health" :100,
