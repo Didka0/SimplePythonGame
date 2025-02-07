@@ -11,59 +11,61 @@ def print_stats(stats):
     print("\nPlayers info: \n Player 1 health - {player1_health} \n Player 1 mana - {player1_mana} \n \n Player 2 health - {player2_health} \n Player 2 mana - {player2_mana}".format(**stats))
 
 def player1_turn(stats):
-    name1 = input("\n Enter your name,Player 1: ")
-    print("Choose your move,", name1,":", end='')
+    print("Choose your move,", stats["player1_name"] ,":", end='')
     player_choice1 = input(" Attack,Heal,Cast fireball or Restore mana?")
+    player_choice1 = player_choice1.lower()
 
-    if player_choice1 == "Attack":
+    if player_choice1 == "attack":
         damage = random.choice(range(10, 20))
         stats["player2_health"] -= damage
         print("You dealt: ", damage, " damage")
         print_stats(stats)
-    elif player_choice1 == "Heal":
+    elif player_choice1 == "heal":
         stats["player1_health"] += 10
         print(" Your health now is: ", stats["player1_health"])
         print_stats(stats)
-    elif player_choice1 == "Cast fireball":
+    elif player_choice1 == "cast fireball":
         stats["player1_mana"] -= 40
         stats["player2_health"] -= 30
         print("Damage dealt: 30")
         print_stats(stats)
-    elif player_choice1 == "Restore mana":
+    elif player_choice1 == "restore mana":
         stats["player1_mana"] += 20
         print("You restored 20 mana")
         print_stats(stats)
 
-    def player2_turn(stats):
-        name2 = input("\n Enter your name,Player 2: ")
-        print("Choose your move,", name2,":", end='')
-        player_choice2 = input(" Attack,Heal,Cast fireball or Restore mana?")
+def player2_turn(stats):
+    print("Choose your move,", stats["player2_name"], ":", end='')
+    player_choice2 = input(" Attack,Heal,Cast fireball or Restore mana?")
+    player_choice2 = player_choice2.lower()
+    if player_choice2 == "attack":
+        damage = random.choice(range(10, 20))
+        stats["player1_health"] -= damage
+        print("You dealt: ", damage, " damage")
+        print_stats(stats)
+    elif player_choice2 == "heal":
+        stats["player2_health"] += 10
+        print(" Your health now is: ", stats["player2_health"])
+        print_stats(stats)
+    elif player_choice2 == "cast fireball":
+        stats["player2_mana"] -= 40
+        stats["player1_health"] -= 30
+        print("Damage dealt: 30")
+        print_stats(stats)
+    elif player_choice2 == "restore mana":
+        stats["player2_mana"] += 20
+        print("You restored 20 mana")
+        print_stats(stats)
 
-        if player_choice2 == "Attack":
-            damage = random.choice(range(10, 20))
-            stats["player1_health"] -= damage
-            print("You dealt: ", damage, " damage")
-            print_stats(stats)
-        elif player_choice2 == "Heal":
-            stats["player2_health"] += 10
-            print(" Your health now is: ", stats["player2_health"])
-            print_stats(stats)
-        elif player_choice2 == "Cast fireball":
-            stats["player2_mana"] -= 40
-            stats["player1_health"] -= 30
-            print("Damage dealt: 30")
-            print_stats(stats)
-        elif player_choice2 == "Restore mana":
-            stats["player2_mana"] += 20
-            print("You restored 20 mana")
-            print_stats(stats)
 
 def main():
     stats = {
         "player1_health" :100,
         "player2_health" :100,
         "player1_mana" :100,
-        "player2_mana" :100
+        "player2_mana" :100,
+        "player1_name": None,
+        "player2_name": None
     }
 
     print_game_rules()
@@ -78,7 +80,21 @@ def main():
         print("See you later!")
         exit()
 
-    player1_turn(stats)
+    stats["player1_name"] = input("\n Enter your name,Player 1: ").capitalize()
+    stats["player2_name"] = input("\n Enter your name,Player 2: ").capitalize()
+    
+    while (True):
+        player1_turn(stats)
+
+        if stats["player2_health"] <= 0:
+            print("Player 1 wins")
+            break
+
+        player2_turn(stats)
+
+        if stats["player1_health"] <= 0:
+            print("Player 2 wins")
+            break
 
 
 main()
